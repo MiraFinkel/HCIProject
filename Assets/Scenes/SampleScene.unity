@@ -499,6 +499,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wrmhl: {fileID: 1370797809}
   cube: {fileID: 637443131}
+  speed: 1
 --- !u!114 &1370797809 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 114925361610221660, guid: 2b0e7c930f0d5374184589cfa034236c, type: 3}
