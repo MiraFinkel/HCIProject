@@ -100,4 +100,9 @@ public class GameManager : MonoBehaviour
         floatDataArr.Add("zNormAcc", zNormAcc);
         return floatDataArr;
     }
+
+    private void generateObject()
+    {
+        GameObject shapeGO = Instantiate(Resources.Load("Shape")) as GameObject;
+    }
 }
