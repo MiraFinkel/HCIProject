@@ -20,13 +20,19 @@ public class OrbitMotion : MonoBehaviour
             return;
         }
         SetOrbitingObjectPositiion();
-        // if (orbit is active) stsart orbit 
+        StartCoroutine(AnimateOrbit());
+
     }
 
     void SetOrbitingObjectPositiion()
     {
-        Vector2 orbitPos = orbitPath.Evaluate(orbitProgrss);
-        orbittinObject.localPosition = new Vector3(orbitPos.x, 0, orbitPos.y);
+        
+        //Vector2 orbitPos = orbitPath.Evaluate(orbitProgrss);
+        //orbittinObject.localPosition = new Vector3(orbitPos.x, 0, orbitPos.y);
+        
+        orbittinObject.localPosition = orbitPath.Evaluate3(orbitProgrss);
+
+
     }
 
     IEnumerator AnimateOrbit()
