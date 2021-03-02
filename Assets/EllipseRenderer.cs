@@ -28,7 +28,7 @@ public class EllipseRenderer : MonoBehaviour
         for (int i =0; i < segments; i++)
         {
             //Vector2 position2D = ellipse.Evaluate((((float)i / (float)segments)));
-            points[i] = ellipse.Evaluate3((((float)i / (float)segments)));
+            points[i] = ellipse.Evaluate3D((((float)i / (float)segments)));
         }
         points[segments] = points[0];
 
