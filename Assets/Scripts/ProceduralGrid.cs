@@ -41,10 +41,10 @@ public class ProceduralGrid : MonoBehaviour
             {
                 Vector3 cellOffset = new Vector3(x * cellSize, 0, y * cellSize);
 
-                verticies[v + 0] = new Vector3(-vertexOffset, x + y, -vertexOffset) + cellOffset + gridOffset;
-                verticies[v + 1] = new Vector3(-vertexOffset, x + y,  vertexOffset) + cellOffset + gridOffset;
-                verticies[v + 2] = new Vector3( vertexOffset, x + y, -vertexOffset) + cellOffset + gridOffset;
-                verticies[v + 3] = new Vector3( vertexOffset, x + y,  vertexOffset) + cellOffset + gridOffset;
+                verticies[v + 0] = new Vector3(-vertexOffset, 0, -vertexOffset) + cellOffset + gridOffset;
+                verticies[v + 1] = new Vector3(-vertexOffset, 0,  vertexOffset) + cellOffset + gridOffset;
+                verticies[v + 2] = new Vector3( vertexOffset, 0, -vertexOffset) + cellOffset + gridOffset;
+                verticies[v + 3] = new Vector3( vertexOffset, 0,  vertexOffset) + cellOffset + gridOffset;
 
                 triangles[t + 0] = v + 0;
                 triangles[t + 1] = triangles[t + 4] = v + 1;
@@ -72,7 +72,7 @@ public class ProceduralGrid : MonoBehaviour
         {
             for (int y = 0; y <= gridSize; y++)
             {
-                verticies[v] = new Vector3((x * cellSize) - vertexOffset, (x + y) * 0.2f, (y * cellSize) - vertexOffset);
+                verticies[v] = new Vector3((x * cellSize) - vertexOffset, (0) * 0.2f, (y * cellSize) - vertexOffset);
                 v++;
             }
         }

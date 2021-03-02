@@ -5,20 +5,11 @@ using UnityEngine;
 public class ShapeGenerator : MonoBehaviour
 {
     [SerializeField] private Transform generatorPosition;
+    [SerializeField] private OrbitMotion orbitMotion;
     //[SerializeField] private int shapeAmount = 1;
     [SerializeField] private float respawnTime = 1.0f;
     [SerializeField] private bool spawn = false;
 
-    //[Range(3, 10)]
-    //[SerializeField] private int numOfSquers = 3;
-    //[Range(0f, 1f)]
-    //[SerializeField] private float scale = 1f;
-    //[Range(0f, 1f)]
-    //[SerializeField] private float red;
-    //[Range(0f, 1f)]
-    //[SerializeField] private float green;
-    //[Range(0f, 1f)]
-    //[SerializeField] private float blue;
 
     void Start()
     {
@@ -39,13 +30,6 @@ public class ShapeGenerator : MonoBehaviour
     {
         GameObject shapeGO = Instantiate(Resources.Load("Shape")) as GameObject;
         shapeGO.transform.position = generatorPosition.position;
-
-        VoxelRenderer voxelRenderer = shapeGO.GetComponent<VoxelRenderer>();
-
-        voxelRenderer.numOfSquers = Random.Range(3, 10);
-        voxelRenderer.scale = Random.Range(0f, 1f);
-        voxelRenderer.red = Random.Range(0f, 1f);
-        voxelRenderer.green = Random.Range(0f, 1f);
-        voxelRenderer.blue = Random.Range(0f, 1f);
+        //shapeGO.transform.position = orbitMotion.orbittinObject.localPosition;
     }
 }
