@@ -7,15 +7,9 @@ using UnityEngine;
 public class VoxelRenderer : MonoBehaviour
 {
     [Range(3, 10)]
-    [HideInInspector] public int numOfSquers = 3;
-    [Range(0, 1)]
-    [HideInInspector] public float scale = 1f;
-    [Range(0, 1)]
-    [HideInInspector] public float red;
-    [Range(0, 1)]
-    [HideInInspector] public float green;
-    [Range(0, 1)]
-    [HideInInspector] public float blue;
+    [HideInInspector] public int numOfSquers;
+    [Range(0f, 1f)]
+    [HideInInspector] public float scale;
 
 
     private List<Vector3> verticies;
@@ -26,6 +20,9 @@ public class VoxelRenderer : MonoBehaviour
 
     void Awake()
     {
+        numOfSquers = Random.Range(3, 10);
+        scale = Random.Range(0f, 0.05f);
+
         mesh = GetComponent<MeshFilter>().mesh;
         adjScale = scale * 0.5f;
     }
@@ -34,6 +31,11 @@ public class VoxelRenderer : MonoBehaviour
     {
         GenerateVoxelMesh(new VoxelData(numOfSquers));
         UpdateMesh();
+    }
+
+    void Update()
+    {
+        transform.localEulerAngles += new Vector3(0, 0, 1) * 100f * Time.deltaTime;
     }
 
     void GenerateVoxelMesh(VoxelData data)
@@ -91,9 +93,9 @@ public class VoxelRenderer : MonoBehaviour
     Color getColor()
     {
         Color color = Color.white;
-        color.r = red;
-        color.g = green;
-        color.b = blue;
+        color.r = Random.Range(0f, 1f);
+        color.g = Random.Range(0f, 1f);
+        color.b = Random.Range(0f, 1f);
         return color;
     }
 
