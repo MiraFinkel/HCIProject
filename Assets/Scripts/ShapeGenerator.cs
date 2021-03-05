@@ -5,31 +5,30 @@ using UnityEngine;
 public class ShapeGenerator : MonoBehaviour
 {
     [SerializeField] private Transform generatorPosition;
-    [SerializeField] private OrbitMotion orbitMotion;
-    //[SerializeField] private int shapeAmount = 1;
-    [SerializeField] private float respawnTime = 1.0f;
-    [SerializeField] private bool spawn = false;
+    [HideInInspector] public float respawnTime = 1.0f;
+    [HideInInspector] public bool spawn = false;
+    [HideInInspector] public Color color = Color.red;
 
 
-    void Start()
+
+    void Update()
     {
-        StartCoroutine(GenerateShapes());
+        if (spawn)
+        {
+            StartCoroutine(GenerateShapes());
+        }
     }
 
     IEnumerator GenerateShapes()
     {
-        while(spawn)
-        {
-            yield return new WaitForSeconds(respawnTime);
-            GenerateShape();
-        }
-        
+        yield return new WaitForSeconds(respawnTime);
+        GenerateShape();
     }
 
     private void  GenerateShape()
     {
         GameObject shapeGO = Instantiate(Resources.Load("Shape")) as GameObject;
+        shapeGO.GetComponent<VoxelRenderer>().setColor(color);
         shapeGO.transform.position = generatorPosition.position;
-        //shapeGO.transform.position = orbitMotion.orbittinObject.localPosition;
     }
 }
