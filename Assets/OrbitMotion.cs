@@ -43,7 +43,6 @@ public class OrbitMotion : MonoBehaviour
         Vector3[] points = new Vector3[segments + 1];
         for (int i = 0; i < segments; i++)
         {
-            //Vector2 position2D = ellipse.Evaluate((((float)i / (float)segments)));
             points[i] = orbitPath.Evaluate3D((((float)i / (float)segments))) + gravityCenter.transform.position;
         }
         points[segments] = points[0];
@@ -85,8 +84,6 @@ public class OrbitMotion : MonoBehaviour
 
     void SetOrbitingObjectPositiion()
     {
-        //Vector2 orbitPos = orbitPath.Evaluate(orbitProgrss);
-        //orbittinObject.localPosition = new Vector3(orbitPos.x, 0, orbitPos.y);
         AxisRotationUpdate();
         orbittinObject.localPosition = orbitPath.Evaluate3D(orbitProgrss);
     }
