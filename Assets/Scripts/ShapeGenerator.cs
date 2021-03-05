@@ -4,29 +4,25 @@ using UnityEngine;
 
 public class ShapeGenerator : MonoBehaviour
 {
-    [Range(3, 35)]
-    public int numOfSquers;
-
     [SerializeField] private Transform generatorPosition;
-    [SerializeField] private float respawnTime = 1.0f;
-    [SerializeField] private bool spawn = false;
-    [SerializeField] private Color color = Color.red;
+    [HideInInspector] public float respawnTime = 1.0f;
+    [HideInInspector] public bool spawn = false;
+    [HideInInspector] public Color color = Color.red;
 
 
 
-    void Start()
+    void Update()
     {
-        StartCoroutine(GenerateShapes());
+        if (spawn)
+        {
+            StartCoroutine(GenerateShapes());
+        }
     }
 
     IEnumerator GenerateShapes()
     {
-        while(spawn)
-        {
-            yield return new WaitForSeconds(respawnTime);
-            GenerateShape();
-        }
-        
+        yield return new WaitForSeconds(respawnTime);
+        GenerateShape();
     }
 
     private void  GenerateShape()

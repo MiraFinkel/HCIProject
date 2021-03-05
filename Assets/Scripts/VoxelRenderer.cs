@@ -7,7 +7,10 @@ using UnityEngine.UI;
 public class VoxelRenderer : MonoBehaviour
 {
     public Color color;
-    [SerializeField] private bool isItSun = false;
+    [SerializeField] public bool isItSun = false;
+    [SerializeField] public bool isItSpaceship = false;
+    [SerializeField] public bool theEndOfTheGame = false;
+
 
     [HideInInspector] public Slider slider;
     [HideInInspector] public int numOfSquers;
@@ -15,6 +18,7 @@ public class VoxelRenderer : MonoBehaviour
     [HideInInspector] public float scale;
 
     private MeshRenderer mR;
+    private BoxCollider bC;
     private List<Vector3> verticies;
     private List<int> triangles;
     private Mesh mesh;
@@ -24,32 +28,57 @@ public class VoxelRenderer : MonoBehaviour
     {
         slider = GameObject.FindObjectOfType<Slider>();
         
-        numOfSquers = (int)slider.value;
+        numOfSquers = GameObject.FindObjectOfType<GameController>().numOfSquares;
         scale = 0.05f;
         adjScale = scale * 0.5f;
 
         mesh = GetComponent<MeshFilter>().mesh;
         mR = GetComponent<MeshRenderer>();
+        if(!isItSpaceship && !isItSun)
+        {
+            bC = GetComponent<BoxCollider>();
+            bC.enabled = false;
+        }
+        else if(isItSun)
+        {
+            if (bC != null) Destroy(bC);
+        }
     }
 
     void Start()
     {
-        GenerateVoxel3Mesh(new VoxelData(numOfSquers, isItSun));
+        if(isItSun)
+        {
+            mR.material.SetColor("_Color", Color.white);
+            mR.material.DisableKeyword("_EMISSION");
+        }
+        else if(isItSpaceship)
+        {
+            mR.material.SetColor("_Color", Color.white);
+            mR.material.SetColor("_EmissionColor", Color.white);
+            mR.material.EnableKeyword("_EMISSION");
+            transform.localEulerAngles += new Vector3(0, 0, 1) * 90f;
+        }
+        else
+        {
+            mR.material.SetColor("_Color", color);
+            mR.material.SetColor("_EmissionColor", color);
+            mR.material.EnableKeyword("_EMISSION");
+        }
+        GenerateVoxel3Mesh(new VoxelData(numOfSquers, isItSun, isItSpaceship));
         UpdateMesh();
     }
 
     void Update()
     {
-        if (!isItSun)
+        if (!isItSun && !isItSpaceship && !theEndOfTheGame)
         {
             transform.localEulerAngles += new Vector3(0, 0, 1) * Random.Range(80f, 100f) * Time.deltaTime;
-            mR.material.SetColor("_Color", color);
-            mR.material.SetColor("_EMISSION", color);
-            mR.material.EnableKeyword("_EMISSION");
+
         }
-        else
+        if(theEndOfTheGame)
         {
-            transform.localEulerAngles += new Vector3(0, 0, 1) * 100f* Time.deltaTime;
+            transform.position += transform.forward * 10f * Time.deltaTime;
         }
     }
 
@@ -152,6 +181,13 @@ public class VoxelRenderer : MonoBehaviour
     public void setColor(Color curColor)
     {
         color = curColor;
+    }
+
+    public void MoveTowordsTheSun()
+    {
+        GameObject sun =  GameObject.FindGameObjectWithTag("Sun");
+        transform.LookAt(sun.transform);
+        bC.enabled = true;
     }
 
 }
