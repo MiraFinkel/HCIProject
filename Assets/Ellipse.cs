@@ -4,8 +4,6 @@ using UnityEngine;
 
 [System.Serializable]
 public class Ellipse {
-    // Start is called before the first frame update
-
     public float r;
     public float yAxis;
     public float zR = 0;
@@ -16,14 +14,6 @@ public class Ellipse {
     {
         this.r = r;
         this.yAxis = yAxis;
-    }
-
-    public Vector2 Evaluate(float t)
-    {
-        float angle = Mathf.Deg2Rad * 360f * t;
-        float x = Mathf.Sin(angle) * r;
-        float y = Mathf.Cos(angle) * yAxis;
-        return new Vector2(x, y);
     }
     
     public Vector3 Evaluate3D(float t)
