@@ -43,6 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 214d39f82fadf53429b16072c8069727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  numOfSquers: 23
   generatorPosition: {fileID: 0}
-  respawnTime: 1
+  respawnTime: 15
   spawn: 1
+  color: {r: 0.2961135, g: 0, b: 1, a: 1}

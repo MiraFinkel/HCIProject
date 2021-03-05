@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class ShapeGenerator : MonoBehaviour
 {
+    [Range(3, 35)]
+    public int numOfSquers;
+
     [SerializeField] private Transform generatorPosition;
-    [SerializeField] private OrbitMotion orbitMotion;
-    //[SerializeField] private int shapeAmount = 1;
     [SerializeField] private float respawnTime = 1.0f;
     [SerializeField] private bool spawn = false;
+    [SerializeField] private Color color = Color.red;
+
 
 
     void Start()
@@ -29,7 +32,7 @@ public class ShapeGenerator : MonoBehaviour
     private void  GenerateShape()
     {
         GameObject shapeGO = Instantiate(Resources.Load("Shape")) as GameObject;
+        shapeGO.GetComponent<VoxelRenderer>().setColor(color);
         shapeGO.transform.position = generatorPosition.position;
-        //shapeGO.transform.position = orbitMotion.orbittinObject.localPosition;
     }
 }

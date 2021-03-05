@@ -95,11 +95,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bf35581fd5526746ac138d8646312d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 0, g: 0, b: 0, a: 0}
+  shapeGenerator: {fileID: 6703426335075590579, guid: a0ccf4fd3fd584d49a8e24a1f7c9c989, type: 3}
   numOfSquers: 3
   scale: 0.3
-  red: 1
-  green: 0.503
-  blue: 0.173
 --- !u!54 &-2031043425867255311
 Rigidbody:
   m_ObjectHideFlags: 0

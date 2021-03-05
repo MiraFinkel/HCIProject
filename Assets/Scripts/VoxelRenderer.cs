@@ -1,44 +1,59 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class VoxelRenderer : MonoBehaviour
 {
-    [Range(3, 10)]
+    public Color color;
+    [SerializeField] private bool isItSun = false;
+
+    [HideInInspector] public Slider slider;
     [HideInInspector] public int numOfSquers;
     [Range(0f, 1f)]
     [HideInInspector] public float scale;
 
-
+    private MeshRenderer mR;
     private List<Vector3> verticies;
     private List<int> triangles;
     private Mesh mesh;
-
     private float adjScale;
 
     void Awake()
     {
-        numOfSquers = Random.Range(3, 10);
-        scale = Random.Range(0f, 0.05f);
+        slider = GameObject.FindObjectOfType<Slider>();
+        
+        numOfSquers = (int)slider.value;
+        scale = 0.05f;
+        adjScale = scale * 0.5f;
 
         mesh = GetComponent<MeshFilter>().mesh;
-        adjScale = scale * 0.5f;
+        mR = GetComponent<MeshRenderer>();
     }
 
     void Start()
     {
-        GenerateVoxelMesh(new VoxelData(numOfSquers));
+        GenerateVoxel3Mesh(new VoxelData(numOfSquers, isItSun));
         UpdateMesh();
     }
 
     void Update()
     {
-        transform.localEulerAngles += new Vector3(0, 0, 1) * 100f * Time.deltaTime;
+        if (!isItSun)
+        {
+            transform.localEulerAngles += new Vector3(0, 0, 1) * Random.Range(80f, 100f) * Time.deltaTime;
+            mR.material.SetColor("_Color", color);
+            mR.material.SetColor("_EMISSION", color);
+            mR.material.EnableKeyword("_EMISSION");
+        }
+        else
+        {
+            transform.localEulerAngles += new Vector3(0, 0, 1) * 100f* Time.deltaTime;
+        }
     }
 
-    void GenerateVoxelMesh(VoxelData data)
+    void GenerateVoxel2Mesh(VoxelData data)
     {
         verticies = new List<Vector3>();
         triangles = new List<int>();
@@ -46,20 +61,51 @@ public class VoxelRenderer : MonoBehaviour
         {
             for (int x = 0; x < data.Width; x++)
             {
-                if (data.GetCell(x,z) == 0)
+                if (data.Get2Cell(x,z) == 0)
                 {
                     continue;
                 }
-                MakeCube(adjScale, new Vector3((float)x * scale, 0, (float)z * scale), x, z, data);
+                Make2Cube(adjScale, new Vector3((float)x * scale, 0, (float)z * scale), x, z, data);
             }
         }
     }
 
-    void MakeCube(float cubeScale, Vector3 cubePos, int x, int z, VoxelData data)
+    void GenerateVoxel3Mesh(VoxelData data)
+    {
+        verticies = new List<Vector3>();
+        triangles = new List<int>();
+        for (int z = 0; z < data.Depth; z++)
+        {
+            for (int x = 0; x < data.Width; x++)
+            {
+                for (int y = 0; y < data.Height; y++)
+                {
+                    if (data.Get3Cell(x, y, z) == 0)
+                    {
+                        continue;
+                    }
+                    Make3Cube(adjScale, new Vector3((float)x * scale, (float)y * scale, (float)z * scale), x, y, z, data);
+                }
+            }
+        }
+    }
+
+    void Make2Cube(float cubeScale, Vector3 cubePos, int x, int z, VoxelData data)
     {
         for (int i = 0; i < 6; i++)
         {
-            if(data.GetNeighbor(x, z, (Direction)i) == 0)
+            if(data.Get2Neighbor(x, z, (Direction)i) == 0)
+            {
+                MakeFace((Direction)i, cubeScale, cubePos);
+            }
+        }
+    }
+
+    void Make3Cube(float cubeScale, Vector3 cubePos, int x, int y, int z, VoxelData data)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (data.Get3Neighbor(x, y, z, (Direction)i) == 0)
             {
                 MakeFace((Direction)i, cubeScale, cubePos);
             }
@@ -86,17 +132,26 @@ public class VoxelRenderer : MonoBehaviour
         mesh.vertices = verticies.ToArray();
         mesh.triangles = triangles.ToArray();
         mesh.RecalculateNormals();
-
-        GetComponent<MeshRenderer>().material.SetColor("_Color", getColor());
     }
 
-    Color getColor()
+    void UpdateRandomColor(Color colorToUpdate)
     {
-        Color color = Color.white;
+        setRandomColor();
+        mR.material.SetColor("_Color", colorToUpdate);
+        mR.material.SetColor("_EMISSION", colorToUpdate);
+        mR.material.EnableKeyword("_EMISSION");
+    }
+
+    void setRandomColor()
+    {
         color.r = Random.Range(0f, 1f);
         color.g = Random.Range(0f, 1f);
         color.b = Random.Range(0f, 1f);
-        return color;
+    }
+
+    public void setColor(Color curColor)
+    {
+        color = curColor;
     }
 
 }
