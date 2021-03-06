@@ -7,6 +7,8 @@ public class SunScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //Debug.Log("inTrigger");
+        
         Destroy(other);
+        Destroy(other.gameObject);
     }
 }

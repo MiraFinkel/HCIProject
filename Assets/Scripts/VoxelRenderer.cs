@@ -78,7 +78,7 @@ public class VoxelRenderer : MonoBehaviour
         }
         if(theEndOfTheGame)
         {
-            transform.position += transform.forward * 10f * Time.deltaTime;
+            transform.position += transform.forward * 1f * Time.deltaTime;
         }
     }
 
