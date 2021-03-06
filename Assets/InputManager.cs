@@ -1,108 +1,71 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
+using System.IO.Ports;
+using System;
+using System.Linq;
 
 public class InputManager : MonoBehaviour
 {
-    [SerializeField] private wrmhlRead wrmhl;
-    [SerializeField] private GameObject cube;
-    [SerializeField] private float speed;
+    SerialPort sp;
+    private float spawn = 0f;
+    private float x = 0f;
+    private float y = 0f;
+    private float z = 0f;
 
+
+    void Start()
+    {
+        sp = new SerialPort("COM3", 9600, Parity.None, 8, StopBits.One); //Replace "COM4" with whatever port your Arduino is on.
+        sp.DtrEnable = false; //Prevent the Arduino from rebooting once we connect to it. 
+                              //A 10 uF cap across RST and GND will prevent this. Remove cap when programming.
+        sp.ReadTimeout = 1; //Shortest possible read time out.
+        sp.WriteTimeout = 1; //Shortest possible write time out.
+        sp.Open();
+        if (sp.IsOpen)
+            sp.Write("Hello World");
+        else
+            Debug.LogError("Serial port: " + sp.PortName + " is unavailable");
+        //Removed the sp.Close line since we're now polling data.
+    }
 
     void Update()
     {
-        string data = wrmhl.getData();
-        if (data != null)
-        {
-            Dictionary<string, float> floatDataArr = parseData(data);
-            cube.transform.eulerAngles = new Vector3(floatDataArr["zNormAcc"], floatDataArr["xNormAcc"], floatDataArr["yNormAcc"]) * speed * Time.deltaTime;
-        }
+        CheckForRecievedData();
+
+        if (Input.GetKeyDown(KeyCode.Escape) && sp.IsOpen)
+            sp.Close();
     }
 
-    Dictionary<string, float> parseData(string data)
+    public void CheckForRecievedData()
     {
-        //Debug.Log("string" + data);
-        string[] dataArr = data.Split('.');
-        float xRaw;
-        float yRaw;
-        float zRaw;
-        float xNorm;
-        float yNorm;
-        float zNorm;
-        float xRawAcc;
-        float yRawAcc;
-        float zRawAcc;
-        float xNormAcc;
-        float yNormAcc;
-        float zNormAcc;
-        if (float.TryParse(dataArr[0], out xRaw))
+        try //Sometimes malformed serial commands come through. We can ignore these with a try/catch.
         {
-            Debug.Log("xRaw: " + xRaw);
+            string inData = sp.ReadLine();
+            // int inSize = inData.Count();
+            string[] angles = inData.Split(',');
+            spawn = float.Parse(angles[0]);
+            x = float.Parse(angles[1]);
+            z = float.Parse(angles[2]);
+            y = float.Parse(angles[3]);
+            //Debug.Log("x:" + x);
+            //Debug.Log("y:" + y);
+            //Debug.Log("z:" + z);
+            //cube.transform.eulerAngles += new Vector3(x, z, y) * 10f * Time.deltaTime;
+            //if (inData.Equals("PRESSED"))
+            //{
+                //Debug.Log("ARDUINO->|| " + inData + " ||MSG SIZE:" + inSize.ToString());
+            //}
+            //Got the data. Flush the in-buffer to speed reads up.
+            //inSize = 0;
+            sp.BaseStream.Flush();
+            sp.DiscardInBuffer();
+            //return new Vector4(spawn, x, z, y);
         }
-        if (float.TryParse(dataArr[1], out yRaw))
-        {
-            Debug.Log("yRaw: " + yRaw);
-        }
-        if (float.TryParse(dataArr[2], out zRaw))
-        {
-            Debug.Log("zRaw: " + zRaw);
-        }
-        if (float.TryParse(dataArr[3], out xNorm))
-        {
-            Debug.Log("xNorm: " + xNorm);
-        }
-        if (float.TryParse(dataArr[4], out yNorm))
-        {
-            Debug.Log("yNorm: " + yNorm);
-        }
-        if (float.TryParse(dataArr[5], out zNorm))
-        {
-            Debug.Log("zNorm: " + zNorm);
-        }
-
-        if (float.TryParse(dataArr[6], out xRawAcc))
-        {
-            Debug.Log("xRaw: " + xRawAcc);
-        }
-        if (float.TryParse(dataArr[7], out yRawAcc))
-        {
-            Debug.Log("yRaw: " + yRawAcc);
-        }
-        if (float.TryParse(dataArr[8], out zRawAcc))
-        {
-            Debug.Log("zRaw: " + zRawAcc);
-        }
-        if (float.TryParse(dataArr[9], out xNormAcc))
-        {
-            Debug.Log("xNorm: " + xNormAcc);
-        }
-        if (float.TryParse(dataArr[10], out yNormAcc))
-        {
-            Debug.Log("yNorm: " + yNormAcc);
-        }
-        if (float.TryParse(dataArr[11], out zNormAcc))
-        {
-            Debug.Log("zNorm: " + zNormAcc);
-        }
-
-        Dictionary<string, float> floatDataArr = new Dictionary<string, float>();
-        floatDataArr.Add("xRaw", xRaw);
-        floatDataArr.Add("yRaw", yRaw);
-        floatDataArr.Add("zRaw", zRaw);
-        floatDataArr.Add("xNorm", xRaw);
-        floatDataArr.Add("yNorm", yNorm);
-        floatDataArr.Add("zNorm", zNorm);
-        floatDataArr.Add("xRawAcc", xRawAcc);
-        floatDataArr.Add("yRawAcc", yRawAcc);
-        floatDataArr.Add("zRawAcc", zRawAcc);
-        floatDataArr.Add("xNormAcc", xRawAcc);
-        floatDataArr.Add("yNormAcc", yNormAcc);
-        floatDataArr.Add("zNormAcc", zNormAcc);
-        return floatDataArr;
+        catch { /*return new Vector4(0f, 0f, 0f, 0f)*/; }
     }
 
-    private void generateObject()
+    public Vector4 GetData()
     {
-        GameObject shapeGO = Instantiate(Resources.Load("Shape")) as GameObject;
+        return new Vector4(spawn, x, y, z);
     }
 }
