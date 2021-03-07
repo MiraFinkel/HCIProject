@@ -10,9 +10,7 @@ public class GameController : MonoBehaviour
     [SerializeField] public float colorNum = 0.2f;
     [Range(1, 36)]
     [SerializeField] public int numOfSquares = 1;
-    //[Range(1, 4)]
-    //[SerializeField] private int span = 1;
-    [Range(0.2f, 1f)]
+    [Range(0.5f, 2f)]
     [SerializeField] private float respawnTime = 1f;
     [SerializeField] private bool spawn = false;
 
@@ -44,7 +42,7 @@ public class GameController : MonoBehaviour
             }
             else
             {
-                spawn = true;
+                spawn = false;
             }
             shapeGenerator.spawn = spawn;
 
@@ -53,7 +51,7 @@ public class GameController : MonoBehaviour
             shapeGenerator.color = color;
 
             numOfSquares = (int)(data[2] / 36) + 1;
-            shapeGenerator.respawnTime = (data[3] / 450) + 0.2f;
+            shapeGenerator.respawnTime = (data[3] / 240) + 0.5f;
 
 
         }
