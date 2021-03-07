@@ -17,11 +17,18 @@ public class GameController : MonoBehaviour
     [SerializeField] private OrbitMotion orbitMotion;
     [SerializeField] private ShapeGenerator shapeGenerator;
     [SerializeField] private InputManager inputManager;
+    [SerializeField] private GameObject paintCanvas;
+    [SerializeField] private GameObject sun;
+
+
 
     private Color color = Color.red;
     private bool endOfGame = false;
 
-
+    void Start()
+    {
+        paintCanvas.SetActive(false);
+    }
 
     void Update()
     {
@@ -30,29 +37,31 @@ public class GameController : MonoBehaviour
         {
             spawn = false;
             shapeGenerator.spawn = false;
+            sun.SetActive(false);
+            paintCanvas.SetActive(true);
             ExplodeAndPaint();
         }
         if (!endOfGame)
         {
-            Vector4 data = inputManager.GetData();
+            //Vector4 data = inputManager.GetData();
             orbitMotion.orbitPath.r = r;
-            if (data[0] == 1f)
-            {
-                spawn = true;
-            }
-            else
-            {
-                spawn = false;
-            }
+            //if (data[0] == 1f)
+            //{
+            //    spawn = true;
+            //}
+            //else
+            //{
+            //    spawn = false;
+            //}
             shapeGenerator.spawn = spawn;
 
-            colorNum = data[1] / 360;
+            //colorNum = data[1] / 360;
             UpdateColor();
             shapeGenerator.color = color;
 
-            numOfSquares = (int)(data[2] / 36) + 1;
-            shapeGenerator.respawnTime = (data[3] / 240) + 0.5f;
-
+            //numOfSquares = (int)(data[2] / 36) + 1;
+            //shapeGenerator.respawnTime = (data[3] / 240) + 0.5f;
+            shapeGenerator.respawnTime = respawnTime;
 
         }
         else
@@ -75,8 +84,8 @@ public class GameController : MonoBehaviour
             if(shape != null)
             {
                 VoxelRenderer vR = shape.GetComponent<VoxelRenderer>();
-                vR.MoveTowordsTheSun();
                 vR.theEndOfTheGame = true;
+                vR.MoveTowordsTheSun();
             }
         }
     }
