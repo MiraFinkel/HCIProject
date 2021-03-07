@@ -15,16 +15,16 @@ public class InputManager : MonoBehaviour
 
     void Start()
     {
-        sp = new SerialPort("COM3", 9600, Parity.None, 8, StopBits.One); //Replace "COM4" with whatever port your Arduino is on.
-        sp.DtrEnable = false; //Prevent the Arduino from rebooting once we connect to it. 
-                              //A 10 uF cap across RST and GND will prevent this. Remove cap when programming.
-        sp.ReadTimeout = 1; //Shortest possible read time out.
-        sp.WriteTimeout = 1; //Shortest possible write time out.
-        sp.Open();
-        if (sp.IsOpen)
-            sp.Write("Hello World");
-        else
-            Debug.LogError("Serial port: " + sp.PortName + " is unavailable");
+        //sp = new SerialPort("COM3", 9600, Parity.None, 8, StopBits.One); //Replace "COM4" with whatever port your Arduino is on.
+        //sp.DtrEnable = false; //Prevent the Arduino from rebooting once we connect to it. 
+        //                      //A 10 uF cap across RST and GND will prevent this. Remove cap when programming.
+        //sp.ReadTimeout = 1; //Shortest possible read time out.
+        //sp.WriteTimeout = 1; //Shortest possible write time out.
+        //sp.Open();
+        //if (sp.IsOpen)
+        //    sp.Write("Hello World");
+        //else
+        //    Debug.LogError("Serial port: " + sp.PortName + " is unavailable");
         //Removed the sp.Close line since we're now polling data.
     }
 

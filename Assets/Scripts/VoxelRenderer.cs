@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using Es.InkPainter.Sample;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static Es.InkPainter.Brush;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class VoxelRenderer : MonoBehaviour
@@ -10,7 +12,9 @@ public class VoxelRenderer : MonoBehaviour
     [SerializeField] public bool isItSun = false;
     [SerializeField] public bool isItSpaceship = false;
     [SerializeField] public bool theEndOfTheGame = false;
-
+    
+    [SerializeField] private PhysicMaterial bounceMaterial;
+    [SerializeField] private Es.InkPainter.Sample.CollisionPainter collisionPainter;
 
     [HideInInspector] public Slider slider;
     [HideInInspector] public int numOfSquers;
@@ -19,30 +23,24 @@ public class VoxelRenderer : MonoBehaviour
 
     private MeshRenderer mR;
     private BoxCollider bC;
+    private Es.InkPainter.Sample.CollisionPainter cP;
     private List<Vector3> verticies;
     private List<int> triangles;
     private Mesh mesh;
     private float adjScale;
+    private float speed;
 
     void Awake()
     {
         slider = GameObject.FindObjectOfType<Slider>();
-        
+
         numOfSquers = GameObject.FindObjectOfType<GameController>().numOfSquares;
         scale = 0.05f;
         adjScale = scale * 0.5f;
 
         mesh = GetComponent<MeshFilter>().mesh;
         mR = GetComponent<MeshRenderer>();
-        if(!isItSpaceship && !isItSun)
-        {
-            bC = GetComponent<BoxCollider>();
-            bC.enabled = false;
-        }
-        else if(isItSun)
-        {
-            if (bC != null) Destroy(bC);
-        }
+        speed = Random.Range(70f, 100f);
     }
 
     void Start()
@@ -64,6 +62,8 @@ public class VoxelRenderer : MonoBehaviour
             mR.material.SetColor("_Color", color);
             mR.material.SetColor("_EmissionColor", color);
             mR.material.EnableKeyword("_EMISSION");
+            SetBoxCollider();
+            SetCollisionPainter();
         }
         GenerateVoxel3Mesh(new VoxelData(numOfSquers, isItSun, isItSpaceship));
         UpdateMesh();
@@ -71,14 +71,13 @@ public class VoxelRenderer : MonoBehaviour
 
     void Update()
     {
-        if (!isItSun && !isItSpaceship && !theEndOfTheGame)
+        if (theEndOfTheGame)
         {
-            transform.localEulerAngles += new Vector3(0, 0, 1) * Random.Range(80f, 100f) * Time.deltaTime;
-
+            transform.position += (transform.forward) * 5f * Time.deltaTime;
         }
-        if(theEndOfTheGame)
+        else if (!isItSun && !isItSpaceship && !theEndOfTheGame)
         {
-            transform.position += transform.forward * 1f * Time.deltaTime;
+            transform.localEulerAngles += new Vector3(0, 0, 1) * speed * Time.deltaTime;
         }
     }
 
@@ -185,9 +184,31 @@ public class VoxelRenderer : MonoBehaviour
 
     public void MoveTowordsTheSun()
     {
+        bC.enabled = true;
+        cP.enabled = true;
+        cP.brush.brushColor = color;
+        //cP.brush.Color = color;
+
+
         GameObject sun =  GameObject.FindGameObjectWithTag("Sun");
         transform.LookAt(sun.transform);
-        bC.enabled = true;
+    }
+
+    void SetBoxCollider()
+    {
+        bC = gameObject.AddComponent<BoxCollider>();
+        bC.material = bounceMaterial;
+        bC.enabled = false;
+    }
+
+    void SetCollisionPainter()
+    {
+        cP = gameObject.AddComponent<Es.InkPainter.Sample.CollisionPainter>();
+        cP.wait = 0;
+        cP.brush = (Es.InkPainter.Brush)collisionPainter.brush.Clone();
+        //cP.brush.brushColor = color;
+        //cP.brush.Color = color;
+        cP.enabled = false;
     }
 
 }

@@ -6,15 +6,28 @@ namespace Es.InkPainter.Sample
 	public class CollisionPainter : MonoBehaviour
 	{
 		[SerializeField]
-		private Brush brush = null;
+		public Brush brush = null;
 
 		[SerializeField]
-		private int wait = 3;
+		public int wait = 3;
 
 		private int waitCount;
 
-		public void Awake()
-		{
+		//public void Awake()
+		//{
+		//	MeshRenderer mR = GetComponent<MeshRenderer>();
+		//	Material material = mR.material;
+		//	Color color = material.color;
+		//	color = brush.Color;
+		//	GetComponent<MeshRenderer>().material.color = brush.Color;
+		//}
+
+		public void Start()
+        {
+			MeshRenderer mR = GetComponent<MeshRenderer>();
+			Material material = mR.material;
+			Color color = material.color;
+			color = brush.Color;
 			GetComponent<MeshRenderer>().material.color = brush.Color;
 		}
 
