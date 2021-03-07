@@ -43,17 +43,20 @@ public class InputManager : MonoBehaviour
             string inData = sp.ReadLine();
             // int inSize = inData.Count();
             string[] angles = inData.Split(',');
+            Debug.Log("angles: " + angles[0] + ", " + angles[1] + ", " + angles[2] + ", " + angles[3]);
             spawn = float.Parse(angles[0]);
             x = float.Parse(angles[1]);
             z = float.Parse(angles[2]);
             y = float.Parse(angles[3]);
+            //Debug.Log("spawn:" + spawn);
             //Debug.Log("x:" + x);
             //Debug.Log("y:" + y);
             //Debug.Log("z:" + z);
+
             //cube.transform.eulerAngles += new Vector3(x, z, y) * 10f * Time.deltaTime;
             //if (inData.Equals("PRESSED"))
             //{
-                //Debug.Log("ARDUINO->|| " + inData + " ||MSG SIZE:" + inSize.ToString());
+            //Debug.Log("ARDUINO->|| " + inData + " ||MSG SIZE:" + inSize.ToString());
             //}
             //Got the data. Flush the in-buffer to speed reads up.
             //inSize = 0;

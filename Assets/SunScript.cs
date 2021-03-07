@@ -6,8 +6,10 @@ public class SunScript : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("inTrigger");
-        
+        if(other.gameObject.CompareTag("Sun"))
+        {
+            return;
+        }
         Destroy(other);
         Destroy(other.gameObject);
     }
