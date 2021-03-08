@@ -19,6 +19,9 @@ public class OrbitMotion : MonoBehaviour
     public float orbitPeriod = 3f;
     public bool orbitActive = true;
 
+    private float cooldown = 0f;
+    private float orbitRate = 3f;
+
     void Start()
     {
         if (orbittinObject == null)
@@ -51,10 +54,11 @@ public class OrbitMotion : MonoBehaviour
         lr.SetPositions(points);
     }
 
-    void AxisRotationUpdate()
+    public void AxisRotationUpdate(float key)
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        if (key == 2f && Time.time > cooldown)
         {
+            cooldown = Time.time + orbitRate;
             orbitPath.xR += (22.5f * Mathf.Deg2Rad);
             if (orbitPath.xR == (360f * Mathf.Deg2Rad))
             {
@@ -62,8 +66,9 @@ public class OrbitMotion : MonoBehaviour
             }
             CalculateEllipse();
         }
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Z) && Time.time > cooldown)
         {
+            cooldown = Time.time + orbitRate;
             orbitPath.zR += (22.5f * Mathf.Deg2Rad);
             if (orbitPath.zR == (360f * Mathf.Deg2Rad))
             {
@@ -71,20 +76,22 @@ public class OrbitMotion : MonoBehaviour
             }
             CalculateEllipse();
         }
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (key == 3f && Time.time > cooldown)
         {
+            cooldown = Time.time + orbitRate;
             orbitPath.yR += (22.5f * Mathf.Deg2Rad);
             if (orbitPath.yR == (360f * Mathf.Deg2Rad))
             {
                 orbitPath.yR = (0f * Mathf.Deg2Rad);
             }
             CalculateEllipse();
+           
         }
     }
 
     void SetOrbitingObjectPositiion()
     {
-        AxisRotationUpdate();
+        //AxisRotationUpdate();
         orbittinObject.localPosition = orbitPath.Evaluate3D(orbitProgrss);
     }
 
