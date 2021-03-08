@@ -203,11 +203,15 @@ public class VoxelRenderer : MonoBehaviour
 
     public void MoveTowordsTheSun()
     {
-        bC.enabled = true;
-        cP.enabled = true;
-        cP.brush.brushColor = color;
-        //cP.brush.Color = color;
-
+        if(bC != null)
+        {
+            bC.enabled = true;
+        }
+        if(cP != null)
+        {
+            cP.enabled = true;
+            cP.brush.brushColor = color;
+        }
 
         GameObject sun =  GameObject.FindGameObjectWithTag("Sun");
         transform.LookAt(sun.transform);
@@ -225,8 +229,6 @@ public class VoxelRenderer : MonoBehaviour
         cP = gameObject.AddComponent<Es.InkPainter.Sample.CollisionPainter>();
         cP.wait = 0;
         cP.brush = (Es.InkPainter.Brush)collisionPainter.brush.Clone();
-        //cP.brush.brushColor = color;
-        //cP.brush.Color = color;
         cP.enabled = false;
     }
 
