@@ -12,15 +12,19 @@ public class VoxelData
     [SerializeField] private int span = 1;
     [SerializeField] private double prob = 0.5;
 
-    public VoxelData(int numOfsquers, bool isItSun, bool isItSpaceship)
+    public VoxelData(int numOfsquers, bool isItSun, bool isItSpaceship, int shapeNum)
     {
-        if(isItSun)
+        if (isItSun)
         {
             data3 = GetSunData();
         }
-        else if(isItSpaceship)
+        else if (isItSpaceship)
         {
             data3 = GetSpaceShipData();
+        }
+        else if (shapeNum != -1)
+        {
+            data3 = GetBackgroundsShapes(shapeNum);
         }
         else
         {
@@ -58,7 +62,7 @@ public class VoxelData
         DataCoordinate offsetToCheck = offsets[(int)direction];
         DataCoordinate neighborCord = new DataCoordinate(x + offsetToCheck.x, 0 + offsetToCheck.y, z + offsetToCheck.z);
 
-        if(neighborCord.x < 0 || neighborCord.x >= Width || neighborCord.y != 0 || neighborCord.z < 0 || neighborCord.z >= Depth)
+        if (neighborCord.x < 0 || neighborCord.x >= Width || neighborCord.y != 0 || neighborCord.z < 0 || neighborCord.z >= Depth)
         {
             return 0;
         }
@@ -108,7 +112,7 @@ public class VoxelData
 
     public int[,] Get2Data(int numberOfCubes)
     {
-        if(numberOfCubes == 3)
+        if (numberOfCubes == 3)
         {
             return new int[,] {{ 1, 0, 0 },
                                { 1, 1, 0 }};
@@ -610,11 +614,151 @@ public class VoxelData
         };
     }
 
+    int[,,] GetBackgroundsShapes(int shapeNum)
+    {
+        if (shapeNum == 1)
+        {
+            return GetBackgroundsShape1();
+        }
+        else if (shapeNum == 2)
+        {
+            return GetBackgroundsShape2();
+        }
+        else
+        {
+            return GetBackgroundsShape3();
+        }
+    }
+    public int[,,] GetBackgroundsShape1()
+    {
+        return new int[,,]
+        {
+            { {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1}},
+            { {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1}},
+            { {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1}},
+            { {0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0} },
+            { {0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0} },
+            { {0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0} }
+        };
 
 
+    }
+    public int[,,] GetBackgroundsShape2()
+    {
+        return new int[,,]
+        {
+            { {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1}},
+            { {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1}},
+            { {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1}},
+            { {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1}},
+            { {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1}},
+            { {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1},
+              {1, 1, 1, 1, 1, 1}}
+        };
+    }
 
+    public int[,,] GetBackgroundsShape3()
+    {
+        return new int[,,]
+        {
+            { {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {0, 0, 0, 1, 1, 1},
+              {0, 0, 0, 1, 1, 1},
+              {0, 0, 0, 1, 1, 1}},
+            { {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {0, 0, 0, 1, 1, 1},
+              {0, 0, 0, 1, 1, 1},
+              {0, 0, 0, 1, 1, 1}},
+            { {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {1, 1, 1, 0, 0, 0},
+              {0, 0, 0, 1, 1, 1},
+              {0, 0, 0, 1, 1, 1},
+              {0, 0, 0, 1, 1, 1}},
+            { {0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 1, 1, 1},
+              {0, 0, 0, 1, 1, 1},
+              {0, 0, 0, 1, 1, 1}},
+            { {0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 1, 1, 1},
+              {0, 0, 0, 1, 1, 1},
+              {0, 0, 0, 1, 1, 1}},
+            { {0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 0, 0, 0},
+              {0, 0, 0, 1, 1, 1},
+              {0, 0, 0, 1, 1, 1},
+              {0, 0, 0, 1, 1, 1}}
+        };
+    }
 }
-
 
 public enum Direction
 {
