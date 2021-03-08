@@ -6,7 +6,6 @@ using System.Windows.Input;
 public class CameraMotion : MonoBehaviour
 {
     public Transform orbittinObject;
-    public Ellipse orbitPath;
     public Transform gravityCenter;
     public float hight = 8;
 
@@ -35,8 +34,9 @@ public class CameraMotion : MonoBehaviour
     void SetOrbitingObjectPositiion()
     {
         float angle = Mathf.Deg2Rad * 360f * orbitProgrss;
-        float x = Mathf.Cos(angle) * 20;
-        float y = Mathf.Sin(angle) * 20;
+        float temp = 20;
+        float x = Mathf.Cos(angle) * temp;
+        float y = Mathf.Sin(angle) * temp;
         orbittinObject.localPosition = new Vector3(x, 8 ,y) + gravityCenter.transform.position;
     }
 

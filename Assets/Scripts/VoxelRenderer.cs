@@ -12,7 +12,9 @@ public class VoxelRenderer : MonoBehaviour
     [SerializeField] public bool isItSun = false;
     [SerializeField] public bool isItSpaceship = false;
     [SerializeField] public bool theEndOfTheGame = false;
-    
+    [SerializeField] private int shapeNum = -1;
+
+
     [SerializeField] private PhysicMaterial bounceMaterial;
     [SerializeField] private Es.InkPainter.Sample.CollisionPainter collisionPainter;
 
@@ -35,12 +37,22 @@ public class VoxelRenderer : MonoBehaviour
         slider = GameObject.FindObjectOfType<Slider>();
 
         numOfSquers = GameObject.FindObjectOfType<GameController>().numOfSquares;
-        scale = 0.05f;
+        if(shapeNum != -1)
+        {
+            scale = 2f;
+            speed = Random.Range(1f, 5f);
+        }
+        else
+        {
+            speed = Random.Range(70f, 100f);
+            scale = 0.05f;
+        }
+        
         adjScale = scale * 0.5f;
 
         mesh = GetComponent<MeshFilter>().mesh;
         mR = GetComponent<MeshRenderer>();
-        speed = Random.Range(70f, 100f);
+        
     }
 
     void Start()
@@ -57,6 +69,13 @@ public class VoxelRenderer : MonoBehaviour
             mR.material.EnableKeyword("_EMISSION");
             transform.localEulerAngles += new Vector3(0, 0, 1) * 90f;
         }
+        else if(shapeNum != -1)
+        {
+            transform.localEulerAngles += new Vector3(1, 0, 0) * 270f;
+            mR.material.SetColor("_Color", color);
+            mR.material.SetColor("_EmissionColor", color);
+            //mR.material.EnableKeyword("_EMISSION");
+        }
         else
         {
             mR.material.SetColor("_Color", color);
@@ -65,7 +84,7 @@ public class VoxelRenderer : MonoBehaviour
             SetBoxCollider();
             SetCollisionPainter();
         }
-        GenerateVoxel3Mesh(new VoxelData(numOfSquers, isItSun, isItSpaceship));
+        GenerateVoxel3Mesh(new VoxelData(numOfSquers, isItSun, isItSpaceship, shapeNum));
         UpdateMesh();
     }
 
