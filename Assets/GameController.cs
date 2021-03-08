@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private ShapeGenerator shapeGenerator;
     [SerializeField] private InputManager inputManager;
     [SerializeField] private CameraManager cameraManager;
+    [SerializeField] private Canvas MainCanvas;
 
     [SerializeField] private GameObject paintCanvas;
     [SerializeField] private GameObject sun;
@@ -89,6 +90,26 @@ public class GameController : MonoBehaviour
             shapeGenerator.spawn = false;
         }
         
+    }
+
+    public void StartGame(int shape)
+    {
+        MainCanvas.enabled = false;
+        if (shape == 1)
+        {
+            GameObject shapeGO = Instantiate(Resources.Load("Box")) as GameObject;
+            shapeGO.transform.position = new Vector3(2.23f, 0.510f, 1.32f);
+        }
+        else if (shape == 2)
+        {
+            GameObject shapeGO = Instantiate(Resources.Load("Sphere")) as GameObject;
+            shapeGO.transform.position = new Vector3(2.23f, 0.510f, 1.32f);
+        }
+        else
+        {
+            GameObject shapeGO = Instantiate(Resources.Load("Cylinder")) as GameObject;
+            shapeGO.transform.position = new Vector3(2.23f, 0.510f, 1.32f);
+        }
     }
 
     void UpdateColor()
