@@ -17,10 +17,10 @@ public class GameController : MonoBehaviour
     [SerializeField] private OrbitMotion orbitMotion;
     [SerializeField] private ShapeGenerator shapeGenerator;
     [SerializeField] private InputManager inputManager;
+    [SerializeField] private CameraManager cameraManager;
+
     [SerializeField] private GameObject paintCanvas;
     [SerializeField] private GameObject sun;
-
-
 
     private Color color = Color.red;
     private bool endOfGame = false;
@@ -71,6 +71,7 @@ public class GameController : MonoBehaviour
                 sun.SetActive(false);
                 paintCanvas.SetActive(true);
                 ExplodeAndPaint();
+                StartCoroutine(cameraManager.ShowCanvas());
             }
 
                 colorNum = data[1] / 360;
