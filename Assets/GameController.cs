@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    [Range(3, 25)]
+    [Range(5, 20)]
     [SerializeField] public float r = 5;
     [Range(0f, 1f)]
     [SerializeField] public float colorNum = 0.2f;
@@ -43,25 +43,44 @@ public class GameController : MonoBehaviour
         }
         if (!endOfGame)
         {
-            //Vector4 data = inputManager.GetData();
+            float[] data = inputManager.GetData();
             orbitMotion.orbitPath.r = r;
-            //if (data[0] == 1f)
-            //{
-            //    spawn = true;
-            //}
-            //else
-            //{
-            //    spawn = false;
-            //}
+            if (data[0] == 1f)
+            {
+                spawn = true;
+            }
+            else
+            {
+                spawn = false;
+            }
             shapeGenerator.spawn = spawn;
+            if (data[4] == 2f)
+            {
+                orbitMotion.AxisRotationUpdate(data[4]);
+            } else if (data[4] == 3f)
+            {
+                orbitMotion.AxisRotationUpdate(data[4]);
+            }
+            else if (data[4] == 4f)
+            {
+                //R
+            } else if (data[4] == 5f)
+            {
+                spawn = false;
+                shapeGenerator.spawn = false;
+                sun.SetActive(false);
+                paintCanvas.SetActive(true);
+                ExplodeAndPaint();
+            }
 
-            //colorNum = data[1] / 360;
+                colorNum = data[1] / 360;
             UpdateColor();
             shapeGenerator.color = color;
 
-            //numOfSquares = (int)(data[2] / 36) + 1;
-            //shapeGenerator.respawnTime = (data[3] / 240) + 0.5f;
-            shapeGenerator.respawnTime = respawnTime;
+            numOfSquares = (int)(data[2] / 36) + 1;
+            shapeGenerator.respawnTime = (data[3] / 240) + 0.5f;
+
+            //shapeGenerator.respawnTime = respawnTime;
 
         }
         else
