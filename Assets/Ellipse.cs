@@ -4,7 +4,7 @@ using UnityEngine;
 
 [System.Serializable]
 public class Ellipse {
-    public float r;
+    public float r = 5f;
     public float yAxis;
     public float zR = 0;
     public float xR = 0;
