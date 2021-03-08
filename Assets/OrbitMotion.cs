@@ -19,6 +19,9 @@ public class OrbitMotion : MonoBehaviour
     public float orbitPeriod = 3f;
     public bool orbitActive = true;
 
+
+    private int radiusIndex = 0;
+    private float[] radiusOptions = {5f, 10f, 15f, 20f};
     private float cooldown = 0f;
     private float orbitRate = 3f;
 
@@ -66,17 +69,7 @@ public class OrbitMotion : MonoBehaviour
             }
             CalculateEllipse();
         }
-        if (Input.GetKeyDown(KeyCode.Z) && Time.time > cooldown)
-        {
-            cooldown = Time.time + orbitRate;
-            orbitPath.zR += (22.5f * Mathf.Deg2Rad);
-            if (orbitPath.zR == (360f * Mathf.Deg2Rad))
-            {
-                orbitPath.zR = (0f * Mathf.Deg2Rad);
-            }
-            CalculateEllipse();
-        }
-        if (key == 3f && Time.time > cooldown)
+        else if (key == 3f && Time.time > cooldown)
         {
             cooldown = Time.time + orbitRate;
             orbitPath.yR += (22.5f * Mathf.Deg2Rad);
@@ -86,6 +79,16 @@ public class OrbitMotion : MonoBehaviour
             }
             CalculateEllipse();
            
+        }
+        else if (key == 4f && Time.time > cooldown)
+        {
+            cooldown = Time.time + orbitRate;
+            radiusIndex += 1;
+            if (radiusIndex == 4)
+            {
+                radiusIndex = 0;
+            }
+            orbitPath.r = radiusOptions[radiusIndex];
         }
     }
 

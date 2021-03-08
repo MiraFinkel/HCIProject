@@ -44,7 +44,6 @@ public class GameController : MonoBehaviour
         if (!endOfGame)
         {
             float[] data = inputManager.GetData();
-            orbitMotion.orbitPath.r = r;
             if (data[0] == 1f)
             {
                 spawn = true;
@@ -63,8 +62,9 @@ public class GameController : MonoBehaviour
             }
             else if (data[4] == 4f)
             {
-                //R
-            } else if (data[4] == 5f)
+                orbitMotion.AxisRotationUpdate(data[4]);
+            }
+            else if (data[4] == 5f)
             {
                 spawn = false;
                 shapeGenerator.spawn = false;
