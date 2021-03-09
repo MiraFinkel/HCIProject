@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject paintCanvas;
     [SerializeField] private GameObject sun;
 
-
+    private bool arduinoControl = false;
     private Color color = Color.red;
     private bool endOfGame = false;
 
@@ -35,82 +35,96 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-
-        if (Input.GetKey("space"))
-        {
-            spawn = false;
-            shapeGenerator.spawn = false;
-            sun.SetActive(false);
-            paintCanvas.SetActive(true);
-            ExplodeAndPaint();
-            StartCoroutine(cameraManager.ShowCanvas());
-        }
         if (!endOfGame)
         {
-            float[] data = inputManager.GetData();
-            if(Input.GetKey("o"))
+            if (arduinoControl)
             {
-                data[0] = 1f;
-            }
-            else if(Input.GetKey("p"))
-            {
-                data[0] = 0f;
-            }
-            if (data[0] == 1f)
-            {
-                spawn = true;
+                float[] data = inputManager.GetData();
+                if (data[0] == 1f)
+                {
+                    spawn = true;
+                }
+                else
+                {
+                    spawn = false;
+                }
+                shapeGenerator.spawn = spawn;
+                if (data[4] == 2f)
+                {
+                    orbitMotion.AxisRotationUpdate(2f);
+                }
+                else if (data[4] == 3f)
+                {
+                    orbitMotion.AxisRotationUpdate(3f);
+                }
+                else if (data[4] == 4f)
+                {
+                    orbitMotion.AxisRotationUpdate(4f);
+                }
+                else if (data[4] == 5f)
+                {
+                    spawn = false;
+                    shapeGenerator.spawn = false;
+                    sun.SetActive(false);
+                    paintCanvas.SetActive(true);
+                    ExplodeAndPaint();
+                    StartCoroutine(cameraManager.ShowCanvas());
+                }
+                colorNum = data[1] / 360;
+                UpdateColor();
+                shapeGenerator.color = color;
+
+                numOfSquares = (int)(data[2] / 10) + 1;
+                shapeGenerator.respawnTime = (data[3] / 240) + 0.5f;
             }
             else
             {
-                spawn = false;
-            }
-            shapeGenerator.spawn = spawn;
-            if(Input.GetKey("q"))
-            {
-                data[4] = 2f;
-            }
-            else if (Input.GetKey("a"))
-            {
-                data[4] = 3f;
-            }
-            else if (Input.GetKey("z"))
-            {
-                data[4] = 4f;
-            }
-            else if (Input.GetKey("x"))
-            {
-                data[4] = 5f;
-            }
-            if (data[4] == 2f)
-            {
-                orbitMotion.AxisRotationUpdate(data[4]);
-            } else if (data[4] == 3f)
-            {
-                orbitMotion.AxisRotationUpdate(data[4]);
-            }
-            else if (data[4] == 4f)
-            {
-                orbitMotion.AxisRotationUpdate(data[4]);
-            }
-            else if (data[4] == 5f)
-            {
-                spawn = false;
-                shapeGenerator.spawn = false;
-                sun.SetActive(false);
-                paintCanvas.SetActive(true);
-                ExplodeAndPaint();
-                StartCoroutine(cameraManager.ShowCanvas());
-            }
+                if (Input.GetKey("z"))
+                {
+                    orbitMotion.AxisRotationUpdate(1f);
+                }
+                else if (Input.GetKey("x"))
+                {
+                    orbitMotion.AxisRotationUpdate(2f);
+                }
+                else if (Input.GetKey("s"))
+                {
+                    orbitMotion.AxisRotationUpdate(3f);
+                }
+                else if (Input.GetKey("d"))
+                {
+                    orbitMotion.AxisRotationUpdate(4f);
+                }
 
-                colorNum = data[1] / 360;
-            UpdateColor();
-            shapeGenerator.color = color;
+                if (Input.GetMouseButton(0))
+                {
+                    spawn = true;
+                }
+                else
+                {
+                    spawn = false;
+                }
+                shapeGenerator.spawn = spawn;
+                if (Input.GetKey("space"))
+                {
+                    spawn = false;
+                    shapeGenerator.spawn = false;
+                    sun.SetActive(false);
+                    paintCanvas.SetActive(true);
+                    ExplodeAndPaint();
+                    StartCoroutine(cameraManager.ShowCanvas());
+                }
+                float mouseX = Input.mousePosition.x / Screen.width;
+                float mouseY = Input.mousePosition.y / Screen.height;
 
-            numOfSquares = (int)(data[2] / 10) + 1;
-            shapeGenerator.respawnTime = (data[3] / 240) + 0.5f;
+                colorNum = mouseX;
+                UpdateColor();
+                shapeGenerator.color = color;
 
-            //shapeGenerator.respawnTime = respawnTime;
+                numOfSquares = (int)(mouseY * 36) + 1;
+                shapeGenerator.respawnTime = 1f;
 
+            }
         }
         else
         {

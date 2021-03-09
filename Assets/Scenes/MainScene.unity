@@ -3495,7 +3495,7 @@ PrefabInstance:
       objectReference: {fileID: 445466249}
     - target: {fileID: 4721997921009857629, guid: b324434aca93122488218d58a4215cad, type: 3}
       propertyPath: numOfSquares
-      value: 12
+      value: 37
       objectReference: {fileID: 0}
     - target: {fileID: 4721997921009857629, guid: b324434aca93122488218d58a4215cad, type: 3}
       propertyPath: cameraManager
