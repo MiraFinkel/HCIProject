@@ -59,6 +59,16 @@ public class OrbitMotion : MonoBehaviour
 
     public void AxisRotationUpdate(float key)
     {
+        if (key == 1f && Time.time > cooldown)
+        {
+            cooldown = Time.time + orbitRate;
+            orbitPath.zR += (22.5f * Mathf.Deg2Rad);
+            if (orbitPath.zR == (360f * Mathf.Deg2Rad))
+            {
+                orbitPath.zR = (0f * Mathf.Deg2Rad);
+            }
+            CalculateEllipse();
+        }
         if (key == 2f && Time.time > cooldown)
         {
             cooldown = Time.time + orbitRate;
